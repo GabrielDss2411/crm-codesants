@@ -21,12 +21,11 @@ export default async function DashboardPage() {
   const kpis = resumo(diagnosticos);
   const semanas = porSemana(diagnosticos);
   const status = porStatus(diagnosticos);
-  const faturamento = contarOpcoes(diagnosticos, "q6");
-  const momento = contarOpcoesOrdenado(diagnosticos, "q4");
-  const canais = contarOpcoesOrdenado(diagnosticos, "q13");
-  const decisao = contarOpcoesOrdenado(diagnosticos, "q14");
-  const ferramentas = contarOpcoesOrdenado(diagnosticos, "q18");
-  const materiais = contarOpcoesOrdenado(diagnosticos, "q21");
+  const faturamento = contarOpcoes(diagnosticos, "q9");
+  const decisao = contarOpcoesOrdenado(diagnosticos, "q7");
+  const acao = contarOpcoesOrdenado(diagnosticos, "q12");
+  const evitar = contarOpcoesOrdenado(diagnosticos, "q18");
+  const materiais = contarOpcoesOrdenado(diagnosticos, "q20");
   const recentes = diagnosticos.slice(0, 6);
 
   return (
@@ -108,7 +107,7 @@ export default async function DashboardPage() {
         <section className="grid gap-5 lg:grid-cols-2">
           <Card>
             <CardHeader
-              title={QUESTIONS_BY_ID.q6.short}
+              title={QUESTIONS_BY_ID.q9.short}
               subtitle="Faixa de faturamento mensal declarada."
             />
             <BarrasRanqueadas
@@ -121,26 +120,8 @@ export default async function DashboardPage() {
 
           <Card>
             <CardHeader
-              title={QUESTIONS_BY_ID.q4.short}
-              subtitle="Em que estágio a empresa diz estar."
-            />
-            <BarrasRanqueadas dados={momento} total={diagnosticos.length} />
-          </Card>
-        </section>
-
-        <section className="grid gap-5 lg:grid-cols-2">
-          <Card>
-            <CardHeader
-              title={QUESTIONS_BY_ID.q13.short}
-              subtitle="Por onde o cliente chega até eles. Múltipla escolha."
-            />
-            <BarrasRanqueadas dados={canais} total={diagnosticos.length} />
-          </Card>
-
-          <Card>
-            <CardHeader
-              title={QUESTIONS_BY_ID.q14.short}
-              subtitle="O que faz fechar negócio. Múltipla escolha."
+              title={QUESTIONS_BY_ID.q7.short}
+              subtitle="O que convence o cliente a contratar. Múltipla escolha."
             />
             <BarrasRanqueadas dados={decisao} total={diagnosticos.length} />
           </Card>
@@ -149,19 +130,25 @@ export default async function DashboardPage() {
         <section className="grid gap-5 lg:grid-cols-2">
           <Card>
             <CardHeader
-              title={QUESTIONS_BY_ID.q18.short}
-              subtitle="O que já roda na operação — e onde há espaço para integrar."
+              title={QUESTIONS_BY_ID.q12.short}
+              subtitle="A atitude que o site deve provocar no visitante."
             />
-            <BarrasRanqueadas
-              dados={ferramentas}
-              total={diagnosticos.length}
-              cor="var(--color-cat-3)"
-            />
+            <BarrasRanqueadas dados={acao} total={diagnosticos.length} />
           </Card>
 
           <Card>
             <CardHeader
-              title={QUESTIONS_BY_ID.q21.short}
+              title={QUESTIONS_BY_ID.q18.short}
+              subtitle="Percepções que a marca precisa evitar. Múltipla escolha."
+            />
+            <BarrasRanqueadas dados={evitar} total={diagnosticos.length} />
+          </Card>
+        </section>
+
+        <section className="grid gap-5 lg:grid-cols-[1fr_1.35fr]">
+          <Card>
+            <CardHeader
+              title={QUESTIONS_BY_ID.q20.short}
               subtitle="O que o cliente já tem pronto ao entrar no projeto."
             />
             <BarrasRanqueadas
@@ -170,9 +157,7 @@ export default async function DashboardPage() {
               cor="var(--color-cat-3)"
             />
           </Card>
-        </section>
 
-        <section>
           {/* ---- Últimos recebidos ---- */}
           <Card>
             <CardHeader
