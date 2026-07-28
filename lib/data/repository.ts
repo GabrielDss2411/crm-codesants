@@ -39,6 +39,7 @@ function fromAnswers(input: NovoDiagnostico, id: string): Diagnostico {
     nome: texto("nome"),
     empresa: texto("empresa"),
     telefone: texto("telefone"),
+    email: texto("email"),
     status: "novo",
     completude: completude(input.answers),
     origem: input.origem,
@@ -111,6 +112,7 @@ type DiagnosticoRow = {
   nome: string | null;
   empresa: string | null;
   telefone: string | null;
+  email: string | null;
   status: Status;
   completude: number;
   origem: string | null;
@@ -137,6 +139,7 @@ function toDiagnostico(row: DiagnosticoRow): Diagnostico {
     nome: row.nome ?? "",
     empresa: row.empresa ?? "",
     telefone: row.telefone ?? "",
+    email: row.email ?? "",
     status: row.status,
     completude: row.completude,
     origem: row.origem ?? "desconhecida",
@@ -189,6 +192,7 @@ class SupabaseRepository implements Repository {
         nome: base.nome,
         empresa: base.empresa,
         telefone: base.telefone,
+        email: base.email,
         status: base.status,
         completude: base.completude,
         origem: base.origem,

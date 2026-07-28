@@ -25,6 +25,7 @@ export type Diagnostico = {
   nome: string;
   empresa: string;
   telefone: string;
+  email: string;
   status: Status;
   /** 0–100: quanto do diagnóstico foi de fato preenchido. */
   completude: number;

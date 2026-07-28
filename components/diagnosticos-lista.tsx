@@ -34,6 +34,7 @@ export function DiagnosticosLista({ diagnosticos }: { diagnosticos: Diagnostico[
       return (
         d.nome.toLowerCase().includes(termo) ||
         d.empresa.toLowerCase().includes(termo) ||
+        d.email.toLowerCase().includes(termo) ||
         d.telefone.includes(termo)
       );
     });
@@ -44,7 +45,7 @@ export function DiagnosticosLista({ diagnosticos }: { diagnosticos: Diagnostico[
       {/* ---- Controles, numa linha só, acima da lista ---- */}
       <div className="flex flex-wrap items-center gap-3">
         <label className="relative min-w-[240px] flex-1">
-          <span className="sr-only">Buscar por nome, empresa ou telefone</span>
+          <span className="sr-only">Buscar por nome, empresa, e-mail ou telefone</span>
           <FiSearch
             className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-faint"
             aria-hidden
@@ -53,7 +54,7 @@ export function DiagnosticosLista({ diagnosticos }: { diagnosticos: Diagnostico[
             type="search"
             value={busca}
             onChange={(e) => setBusca(e.target.value)}
-            placeholder="Buscar por nome, empresa ou telefone…"
+            placeholder="Buscar por nome, empresa, e-mail ou telefone…"
             className="w-full rounded-full border border-white/[.08] bg-surface py-2.5 pl-10 pr-4 text-[14px] text-ink outline-none transition-colors focus:border-brand/45"
           />
         </label>
@@ -119,7 +120,7 @@ export function DiagnosticosLista({ diagnosticos }: { diagnosticos: Diagnostico[
                         </span>
                         <span className="block truncate text-[13px] text-muted-2">
                           {d.nome}
-                          {d.telefone && ` · ${d.telefone}`}
+                          {d.email && ` · ${d.email}`}
                         </span>
                       </span>
                     </span>

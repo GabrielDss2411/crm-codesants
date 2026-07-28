@@ -15,6 +15,7 @@ create table if not exists public.diagnosticos (
   nome        text,
   empresa     text,
   telefone    text,
+  email       text,
   status      text not null default 'novo'
               check (status in ('novo','em_analise','proposta','ganho','perdido')),
   completude  smallint not null default 0 check (completude between 0 and 100),

@@ -57,6 +57,17 @@ export default async function DiagnosticoPage({
                   <span className="font-mono text-[14px]">{diagnostico.telefone}</span>
                 </>
               )}
+              {diagnostico.email && (
+                <>
+                  {" · "}
+                  <a
+                    href={`mailto:${diagnostico.email}`}
+                    className="text-brand transition-opacity hover:opacity-80"
+                  >
+                    {diagnostico.email}
+                  </a>
+                </>
+              )}
             </p>
             <p className="mt-1 text-[13px] text-faint">
               Recebido {tempoRelativo(diagnostico.criadoEm)} ·{" "}
