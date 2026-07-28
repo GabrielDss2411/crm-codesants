@@ -22,6 +22,10 @@ create table if not exists public.diagnosticos (
   origem      text,
   -- Respostas cruas do formulário: { "q1": "texto", "q7": ["Preço","Confiança"] }
   answers     jsonb not null default '{}'::jsonb,
+  -- Agenda preferida, informada na tela de encerramento (depois do insert):
+  -- { "dias": ["Terça"], "periodos": ["Manhã"], "observacao": "…",
+  --   "informadaEm": "2026-07-28T12:00:00.000Z" }
+  disponibilidade jsonb,
   notas       text
 );
 

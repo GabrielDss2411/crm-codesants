@@ -9,7 +9,7 @@
  * "últimas semanas" sempre tenham conteúdo. Só é lido no servidor.
  */
 import { completude } from "./normalize";
-import type { Answers, Diagnostico, Projeto, Status } from "@/lib/types";
+import type { Answers, Diagnostico, Disponibilidade, Projeto, Status } from "@/lib/types";
 
 const DIA = 24 * 60 * 60 * 1000;
 const agora = Date.now();
@@ -21,6 +21,7 @@ const diasAtras = (d: number, hora = 10) => {
 
 type SeedInput = {
   id: string;
+  disponibilidade?: Omit<Disponibilidade, "informadaEm"> & { hDias: number };
   dias: number;
   nome: string;
   empresa: string;
@@ -34,6 +35,7 @@ type SeedInput = {
 const RASCUNHO: SeedInput[] = [
   {
     id: "dg-2041",
+    disponibilidade: { dias: ["Terça", "Quinta"], periodos: ["Manhã"], observacao: "Antes das 10h eu consigo falar sem paciente na cadeira.", hDias: 1 },
     dias: 1,
     nome: "Mariana Alves",
     empresa: "Alves Odontologia",
@@ -97,6 +99,7 @@ const RASCUNHO: SeedInput[] = [
   },
   {
     id: "dg-2039",
+    disponibilidade: { dias: ["Segunda", "Quarta", "Sexta"], periodos: ["Tarde", "Noite"], hDias: 6 },
     dias: 6,
     nome: "Camila Rezende",
     empresa: "Studio Rezende Arquitetura",
@@ -132,6 +135,7 @@ const RASCUNHO: SeedInput[] = [
   },
   {
     id: "dg-2038",
+    disponibilidade: { dias: ["Sábado"], periodos: ["Manhã"], observacao: "Durante a semana fico em obra o dia inteiro.", hDias: 9 },
     dias: 9,
     nome: "Eduardo Pacheco",
     empresa: "Pacheco Climatização",
@@ -260,6 +264,7 @@ const RASCUNHO: SeedInput[] = [
   },
   {
     id: "dg-2033",
+    disponibilidade: { dias: ["Terça", "Quarta"], periodos: ["Tarde"], hDias: 25 },
     dias: 25,
     nome: "Larissa Fontes",
     empresa: "Fontes Pet Care",
@@ -424,6 +429,16 @@ export const SEED_DIAGNOSTICOS: Diagnostico[] = RASCUNHO.map((d) => {
     completude: completude(answers),
     origem: "forms-codesants.vercel.app",
     answers,
+    disponibilidade: d.disponibilidade
+      ? {
+          dias: d.disponibilidade.dias,
+          periodos: d.disponibilidade.periodos,
+          ...(d.disponibilidade.observacao
+            ? { observacao: d.disponibilidade.observacao }
+            : {}),
+          informadaEm: diasAtras(d.disponibilidade.hDias, 12),
+        }
+      : undefined,
     notas: d.notas,
   };
 }).sort((a, b) => b.criadoEm.localeCompare(a.criadoEm));

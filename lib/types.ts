@@ -17,6 +17,36 @@ export const STATUS_LABEL: Record<Status, string> = {
   perdido: "Perdido",
 };
 
+/** Dias e períodos em que o lead prefere ser chamado. */
+export const DIAS_SEMANA = [
+  "Segunda",
+  "Terça",
+  "Quarta",
+  "Quinta",
+  "Sexta",
+  "Sábado",
+] as const;
+export type DiaSemana = (typeof DIAS_SEMANA)[number];
+
+export const PERIODOS = ["Manhã", "Tarde", "Noite"] as const;
+export type Periodo = (typeof PERIODOS)[number];
+
+/** Rótulo com a faixa de horário de cada período, para exibir no CRM. */
+export const PERIODO_HORARIO: Record<Periodo, string> = {
+  Manhã: "8h às 12h",
+  Tarde: "12h às 18h",
+  Noite: "18h às 20h",
+};
+
+export type Disponibilidade = {
+  dias: DiaSemana[];
+  periodos: Periodo[];
+  /** Observação livre: "depois do dia 20", "prefiro por vídeo"… */
+  observacao?: string;
+  /** Quando o lead informou a disponibilidade (ISO 8601). */
+  informadaEm: string;
+};
+
 /** Um diagnóstico respondido — a unidade central do CRM. */
 export type Diagnostico = {
   id: string;
@@ -32,6 +62,8 @@ export type Diagnostico = {
   /** Onde o formulário foi respondido (host de origem). */
   origem: string;
   answers: Answers;
+  /** Preenchida na tela de encerramento, depois do diagnóstico já gravado. */
+  disponibilidade?: Disponibilidade;
   /** Anotações internas, nunca visíveis para o cliente. */
   notas?: string;
 };

@@ -6,7 +6,8 @@ import { getRepository } from "@/lib/data/repository";
 import { detalheDe, isAnswered } from "@/lib/data/normalize";
 import { formatDataHora, linkWhatsApp, tempoRelativo } from "@/lib/format";
 import { DIAGNOSTIC_QUESTIONS, PARTS, IDENTITY_PART } from "@/lib/questions";
-import type { Diagnostico } from "@/lib/types";
+import { PERIODO_HORARIO } from "@/lib/types";
+import type { Diagnostico, Disponibilidade as DisponibilidadeDados } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
@@ -111,6 +112,10 @@ export default async function DiagnosticoPage({
 
         {/* ---- Coluna lateral ---- */}
         <aside className="space-y-5 lg:sticky lg:top-6 lg:self-start">
+          {diagnostico.disponibilidade && (
+            <Disponibilidade dados={diagnostico.disponibilidade} />
+          )}
+
           {diagnostico.notas && (
             <Card>
               <CardHeader title="Anotações internas" subtitle="Nunca visível para o cliente." />
@@ -132,6 +137,63 @@ export default async function DiagnosticoPage({
         </aside>
       </div>
     </>
+  );
+}
+
+/** Agenda preferida para a call, informada no encerramento do formulário. */
+function Disponibilidade({ dados }: { dados: DisponibilidadeDados }) {
+  return (
+    <Card className="border-brand/25 bg-brand/[.05]">
+      <CardHeader
+        title="Disponibilidade para call"
+        subtitle={`Informada ${tempoRelativo(dados.informadaEm)} pelo próprio lead.`}
+      />
+      <div className="space-y-4 px-5 py-4">
+        <div>
+          <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.14em] text-faint">
+            Dias
+          </p>
+          {dados.dias.length ? (
+            <ul className="flex flex-wrap gap-1.5">
+              {dados.dias.map((dia) => (
+                <li
+                  key={dia}
+                  className="rounded-full border border-brand/30 bg-brand/10 px-2.5 py-1 text-[12.5px] text-brand-soft"
+                >
+                  {dia}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-[13px] text-faint">Sem preferência.</p>
+          )}
+        </div>
+
+        <div>
+          <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.14em] text-faint">
+            Períodos
+          </p>
+          {dados.periodos.length ? (
+            <ul className="space-y-1">
+              {dados.periodos.map((periodo) => (
+                <li key={periodo} className="text-[13.5px] text-ink">
+                  {periodo}
+                  <span className="ml-1.5 text-faint">{PERIODO_HORARIO[periodo]}</span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-[13px] text-faint">Sem preferência.</p>
+          )}
+        </div>
+
+        {dados.observacao && (
+          <p className="whitespace-pre-line border-t border-white/[.06] pt-3.5 text-[13.5px] leading-relaxed text-muted">
+            {dados.observacao}
+          </p>
+        )}
+      </div>
+    </Card>
   );
 }
 

@@ -2,7 +2,7 @@ import "server-only";
 
 import { SEED_DIAGNOSTICOS, SEED_PROJETOS } from "./seed";
 import { completude } from "./normalize";
-import type { Answers, Diagnostico, Projeto, Status } from "@/lib/types";
+import type { Answers, Diagnostico, Disponibilidade, Projeto, Status } from "@/lib/types";
 
 /**
  * Contrato único de acesso a dados.
@@ -18,6 +18,8 @@ export interface Repository {
   getDiagnostico(id: string): Promise<Diagnostico | null>;
   createDiagnostico(input: NovoDiagnostico): Promise<Diagnostico>;
   updateStatus(id: string, status: Status): Promise<void>;
+  /** Anexa a agenda preferida. `false` quando o diagnóstico não existe. */
+  setDisponibilidade(id: string, disponibilidade: Disponibilidade): Promise<boolean>;
   listProjetos(): Promise<Projeto[]>;
 }
 
@@ -97,6 +99,17 @@ class DemoRepository implements Repository {
     if (alvo) alvo.status = status;
   }
 
+  async setDisponibilidade(
+    id: string,
+    disponibilidade: Disponibilidade,
+  ): Promise<boolean> {
+    const alvo =
+      memoria.find((d) => d.id === id) ?? SEED_DIAGNOSTICOS.find((d) => d.id === id);
+    if (!alvo) return false;
+    alvo.disponibilidade = disponibilidade;
+    return true;
+  }
+
   async listProjetos(): Promise<Projeto[]> {
     return SEED_PROJETOS;
   }
@@ -117,6 +130,7 @@ type DiagnosticoRow = {
   completude: number;
   origem: string | null;
   answers: Answers;
+  disponibilidade: Disponibilidade | null;
   notas: string | null;
 };
 
@@ -144,6 +158,7 @@ function toDiagnostico(row: DiagnosticoRow): Diagnostico {
     completude: row.completude,
     origem: row.origem ?? "desconhecida",
     answers: row.answers ?? {},
+    disponibilidade: row.disponibilidade ?? undefined,
     notas: row.notas ?? undefined,
   };
 }
@@ -208,6 +223,21 @@ class SupabaseRepository implements Repository {
     const supabase = await this.client();
     const { error } = await supabase.from("diagnosticos").update({ status }).eq("id", id);
     if (error) throw new Error(`Falha ao atualizar status: ${error.message}`);
+  }
+
+  async setDisponibilidade(
+    id: string,
+    disponibilidade: Disponibilidade,
+  ): Promise<boolean> {
+    const supabase = await this.client();
+    const { data, error } = await supabase
+      .from("diagnosticos")
+      .update({ disponibilidade })
+      .eq("id", id)
+      .select("id")
+      .maybeSingle();
+    if (error) throw new Error(`Falha ao gravar disponibilidade: ${error.message}`);
+    return Boolean(data);
   }
 
   async listProjetos(): Promise<Projeto[]> {

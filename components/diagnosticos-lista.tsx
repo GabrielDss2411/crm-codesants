@@ -115,8 +115,19 @@ export function DiagnosticosLista({ diagnosticos }: { diagnosticos: Diagnostico[
                     <span className="flex min-w-0 items-center gap-3">
                       <Avatar initials={iniciais(d.nome || d.empresa)} />
                       <span className="min-w-0">
-                        <span className="block truncate text-[14.5px] text-ink-bright">
-                          {d.empresa || "Empresa não informada"}
+                        <span className="flex items-center gap-2">
+                          <span className="truncate text-[14.5px] text-ink-bright">
+                            {d.empresa || "Empresa não informada"}
+                          </span>
+                          {/* Quem deixou agenda está esperando contato. */}
+                          {d.disponibilidade && (
+                            <span
+                              title="Informou disponibilidade para call"
+                              className="shrink-0 rounded-full border border-brand/35 bg-brand/12 px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.12em] text-brand-soft"
+                            >
+                              call
+                            </span>
+                          )}
                         </span>
                         <span className="block truncate text-[13px] text-muted-2">
                           {d.nome}

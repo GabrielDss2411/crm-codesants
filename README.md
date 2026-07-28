@@ -21,8 +21,8 @@ sidebar avisa isso em amarelo. Nada de credencial para começar a mexer.
 | Rota | O que faz |
 |---|---|
 | `/` | Dashboard: KPIs, volume por semana, pipeline e a leitura estratégica das respostas de escolha. |
-| `/diagnosticos` | Lista completa, com busca por nome/empresa/telefone e filtro por status. |
-| `/diagnosticos/[id]` | O diagnóstico inteiro, na ordem do formulário, com atalho de WhatsApp. |
+| `/diagnosticos` | Lista completa, com busca por nome/empresa/e-mail/telefone e filtro por status. Quem deixou agenda ganha a etiqueta *call*. |
+| `/diagnosticos/[id]` | O diagnóstico inteiro, na ordem do formulário, com a disponibilidade para call e atalho de WhatsApp. |
 | `/projetos` | Acompanhamento de projetos por fase. É a tela que o cliente verá na fase 2. |
 
 ## Como o formulário conversa com o CRM
@@ -46,6 +46,22 @@ X-Ingest-Token: <opcional>
 
 Respostas: `201` com `{ id, completude, persistido }` · `401` token inválido ·
 `400` JSON inválido · `422` envio sem identificação.
+
+Depois, na tela de encerramento, o formulário anexa a agenda preferida ao
+registro que acabou de criar:
+
+```http
+PATCH /api/diagnosticos/<id>
+
+{ "disponibilidade": { "dias": ["Terça"], "periodos": ["Manhã"],
+                       "observacao": "só depois do dia 20" } }
+```
+
+São duas chamadas de propósito: quando a tela de encerramento aparece, o
+diagnóstico **já está gravado**. Quem fechar a aba ali não perde as respostas —
+só deixa de marcar horário. Dias e períodos fora da lista conhecida são
+descartados. Respostas: `200` · `404` diagnóstico inexistente · `422` sem
+nenhum dia, período ou observação.
 
 O campo **`persistido`** diz a verdade sobre o destino: `false` enquanto não
 houver Supabase configurado.
@@ -97,7 +113,8 @@ app/
   page.tsx                    dashboard
   diagnosticos/               lista e detalhe
   projetos/                   fase 2
-  api/diagnosticos/route.ts   ingestão (POST) + preflight (OPTIONS)
+  api/diagnosticos/route.ts        ingestão (POST) + preflight (OPTIONS)
+  api/diagnosticos/[id]/route.ts   disponibilidade para call (PATCH)
   globals.css                 tokens do design system
 components/                   shell, cartões, gráficos, tabela
 lib/
