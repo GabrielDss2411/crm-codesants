@@ -1,0 +1,168 @@
+@import "tailwindcss";
+
+/* ============================================================
+   CodeSants CRM · Design tokens
+   Espelham web/app/globals.css (site institucional) + forms/.
+   Não invente cores novas aqui: use os tokens abaixo.
+   ============================================================ */
+@theme {
+  /* Superfícies */
+  --color-bg: #07100b;
+  --color-surface: #0c150f;
+  --color-surface-2: #0a120d;
+  --color-panel: #0e1812;
+
+  /* Tinta */
+  --color-ink: #eaf2ec;
+  --color-ink-bright: #f3f8f4;
+  --color-ink-invert: #04140c;
+  --color-muted: #a7bbae;
+  --color-muted-2: #8ba194;
+  --color-subtle: #9db0a4;
+  --color-faint: #5c7065;
+
+  /* Marca */
+  --color-brand: #3ddc84;
+  --color-brand-2: #2bd4c0;
+  --color-brand-soft: #7fe3ab;
+
+  /* Estado — reservados, nunca usados como "série 4" de gráfico */
+  --color-good: #33ab6f;
+  --color-warning: #c08420;
+  --color-serious: #cf5b52;
+  --color-critical: #b2372f;
+
+  /* Séries categóricas de gráfico — ordem fixa, nunca ciclada.
+     Validada em superfície escura #0e1812 (faixa de luminosidade,
+     piso de croma, separação para daltonismo e contraste). */
+  --color-cat-1: #33ab6f;
+  --color-cat-2: #c08420;
+  --color-cat-3: #4a86dd;
+  --color-cat-4: #cf5b52;
+  --color-cat-5: #9a6cd8;
+
+  /* Rampa sequencial (magnitude) — matiz único, do passo mais escuro ao mais
+     claro. Escolhida PARA o fundo escuro, não invertida do modo claro: o passo
+     mais baixo ainda tem 3,5:1 de contraste contra a superfície, para que a
+     categoria de menor valor não desapareça. */
+  --color-seq-1: #2a7a55;
+  --color-seq-2: #309166;
+  --color-seq-3: #36a877;
+  --color-seq-4: #3bc47d;
+  --color-seq-5: #3ddc84;
+
+  --font-sans: var(--font-hanken), system-ui, sans-serif;
+  --font-display: var(--font-space-grotesk), system-ui, sans-serif;
+  --font-mono: var(--font-space-mono), ui-monospace, monospace;
+
+  --radius: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 22px;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-expo: cubic-bezier(0.7, 0, 0.84, 0);
+}
+
+:root {
+  color-scheme: dark;
+  /* Linhas — fora do @theme porque são rgba compostas */
+  --line: rgba(255, 255, 255, 0.09);
+  --line-soft: rgba(255, 255, 255, 0.05);
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: rgba(61, 220, 132, 0.28);
+  color: #fff;
+}
+
+/* Barra de rolagem (idêntica ao site) */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(61, 220, 132, 0.45) transparent;
+}
+::-webkit-scrollbar {
+  width: 11px;
+  height: 11px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--color-brand), var(--color-brand-2));
+  border-radius: 999px;
+  border: 3px solid var(--color-bg);
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--color-faint);
+}
+
+/* ===== Helpers reaproveitados do site ===== */
+.gradient-text {
+  background: linear-gradient(110deg, var(--color-brand), var(--color-brand-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-brand);
+}
+
+/* Fundo pontilhado com brilho — usado no topo do dashboard */
+.app-grid {
+  background-image:
+    radial-gradient(circle at 12% 0%, rgba(61, 220, 132, 0.1), transparent 42%),
+    radial-gradient(circle at 88% 8%, rgba(43, 212, 192, 0.06), transparent 38%),
+    radial-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: auto, auto, 30px 30px;
+}
+
+/* Foco visível e consistente em toda a aplicação */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+/* Entrada suave de listas e cards */
+@keyframes crmRise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.rise {
+  animation: crmRise 0.5s var(--ease-out-expo) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise {
+    animation: none;
+  }
+  * {
+    transition-duration: 0.01ms !important;
+  }
+}
