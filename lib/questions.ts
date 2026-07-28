@@ -19,6 +19,11 @@ export type Question = {
   options?: string[];
   /** A pergunta aceita a opção "Outro" com texto livre. */
   other?: boolean;
+  /**
+   * A pergunta tem um relato em texto além das opções, guardado em
+   * `<id>__detalhe`. Marcar a área não responde: o relato é que responde.
+   */
+  detail?: boolean;
 };
 
 export const IDENTITY_PART = "Identificação";
@@ -236,6 +241,54 @@ export const QUESTIONS: Question[] = [
 
   {
     id: "q21",
+    part: "Parte 4 · Além do site",
+    type: "multi",
+    label: "Existe algum processo da empresa que poderia ser mais eficiente?",
+    short: "Processos a melhorar",
+    options: [
+      "Atendimento",
+      "Comercial",
+      "Marketing",
+      "Financeiro",
+      "Operação",
+      "Gestão",
+      "Comunicação",
+    ],
+    other: true,
+    detail: true,
+  },
+  {
+    id: "q22",
+    part: "Parte 4 · Além do site",
+    type: "long",
+    label: "Existe alguma atividade repetitiva que consome muito tempo da equipe?",
+    short: "Trabalho repetitivo",
+  },
+  {
+    id: "q23",
+    part: "Parte 4 · Além do site",
+    type: "long",
+    label:
+      "Se você pudesse resolver apenas um problema da empresa através da tecnologia, qual seria?",
+    short: "Problema nº 1 para tecnologia",
+  },
+  {
+    id: "q24",
+    part: "Parte 4 · Além do site",
+    type: "long",
+    label: "Vocês usam alguma ferramenta ou sistema que não atende mais à empresa?",
+    short: "Ferramenta insuficiente",
+  },
+  {
+    id: "q25",
+    part: "Parte 4 · Além do site",
+    type: "long",
+    label: "Existe algum projeto ou ideia que vocês gostariam de colocar em prática?",
+    short: "Projeto futuro",
+  },
+
+  {
+    id: "q26",
     part: "A última pergunta, e a mais importante",
     type: "long",
     label:

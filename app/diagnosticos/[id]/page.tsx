@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { FiArrowLeft, FiExternalLink, FiPhone } from "react-icons/fi";
 import { Card, CardHeader, Progress, StatusBadge } from "@/components/ui";
 import { getRepository } from "@/lib/data/repository";
-import { isAnswered } from "@/lib/data/normalize";
+import { detalheDe, isAnswered } from "@/lib/data/normalize";
 import { formatDataHora, linkWhatsApp, tempoRelativo } from "@/lib/format";
 import { DIAGNOSTIC_QUESTIONS, PARTS, IDENTITY_PART } from "@/lib/questions";
 import type { Diagnostico } from "@/lib/types";
@@ -150,7 +150,9 @@ function ParteRespostas({
       <ol className="divide-y divide-white/[.05]">
         {questions.map((q, i) => {
           const resposta = diagnostico.answers[q.id];
-          const vazio = !isAnswered(resposta);
+          const detalhe = detalheDe(diagnostico.answers, q.id);
+          // Numa pergunta com relato, o texto responde mesmo sem opção marcada.
+          const vazio = !isAnswered(resposta) && !detalhe;
 
           return (
             <li key={q.id} className="px-5 py-4">
@@ -175,8 +177,16 @@ function ParteRespostas({
                       ))}
                     </ul>
                   ) : (
-                    <p className="mt-2 whitespace-pre-line text-[15px] leading-relaxed text-ink">
-                      {resposta}
+                    resposta && (
+                      <p className="mt-2 whitespace-pre-line text-[15px] leading-relaxed text-ink">
+                        {resposta}
+                      </p>
+                    )
+                  )}
+
+                  {detalhe && (
+                    <p className="mt-3 whitespace-pre-line border-l-2 border-brand/30 pl-3.5 text-[15px] leading-relaxed text-ink">
+                      {detalhe}
                     </p>
                   )}
                 </div>

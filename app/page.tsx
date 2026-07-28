@@ -26,6 +26,7 @@ export default async function DashboardPage() {
   const acao = contarOpcoesOrdenado(diagnosticos, "q12");
   const evitar = contarOpcoesOrdenado(diagnosticos, "q18");
   const materiais = contarOpcoesOrdenado(diagnosticos, "q20");
+  const processos = contarOpcoesOrdenado(diagnosticos, "q21");
   const recentes = diagnosticos.slice(0, 6);
 
   return (
@@ -145,7 +146,19 @@ export default async function DashboardPage() {
           </Card>
         </section>
 
-        <section className="grid gap-5 lg:grid-cols-[1fr_1.35fr]">
+        <section className="grid gap-5 lg:grid-cols-2">
+          <Card>
+            <CardHeader
+              title={QUESTIONS_BY_ID.q21.short}
+              subtitle="Onde há oportunidade além do site — automação, sistema, integração."
+            />
+            <BarrasRanqueadas
+              dados={processos}
+              total={diagnosticos.length}
+              cor="var(--color-cat-3)"
+            />
+          </Card>
+
           <Card>
             <CardHeader
               title={QUESTIONS_BY_ID.q20.short}
@@ -157,7 +170,9 @@ export default async function DashboardPage() {
               cor="var(--color-cat-3)"
             />
           </Card>
+        </section>
 
+        <section>
           {/* ---- Últimos recebidos ---- */}
           <Card>
             <CardHeader

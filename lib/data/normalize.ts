@@ -1,6 +1,15 @@
 import { DIAGNOSTIC_QUESTIONS, QUESTIONS_BY_ID } from "@/lib/questions";
 import type { Answers, AnswerValue } from "@/lib/types";
 
+/** Sufixo da chave que guarda o relato em texto de uma pergunta com opções. */
+export const DETALHE = "__detalhe";
+
+/** O relato complementar de uma pergunta, se houver. */
+export function detalheDe(answers: Answers, questionId: string): string | null {
+  const valor = answers[questionId + DETALHE];
+  return typeof valor === "string" && valor.trim() ? valor : null;
+}
+
 /** Uma resposta conta como preenchida se tem texto ou ao menos uma opção. */
 export function isAnswered(value: AnswerValue | undefined): boolean {
   if (value == null) return false;
@@ -29,6 +38,14 @@ export function sanitizeAnswers(input: unknown): Answers {
   const out: Answers = {};
 
   for (const [key, raw] of Object.entries(input as Record<string, unknown>)) {
+    // Relato complementar de uma pergunta com `detail` (ex.: "q21__detalhe").
+    const alvoDetalhe = key.endsWith(DETALHE) ? key.slice(0, -DETALHE.length) : null;
+    if (alvoDetalhe) {
+      if (!QUESTIONS_BY_ID[alvoDetalhe]?.detail) continue;
+      if (typeof raw === "string" && raw.trim()) out[key] = raw.trim().slice(0, 5000);
+      continue;
+    }
+
     const question = QUESTIONS_BY_ID[key];
     if (!question) continue;
 
