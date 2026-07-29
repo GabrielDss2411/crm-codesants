@@ -100,6 +100,15 @@ RLS ligado e sem policies — ou seja, nada é legível pela chave anônima. A
 policy de leitura por dono, para o portal do cliente, está escrita e comentada
 no fim do arquivo.
 
+## Aviso no WhatsApp ao concluir
+
+O lead recebe uma mensagem no WhatsApp assim que termina o diagnóstico, por um
+fluxo do n8n: [`n8n/`](./n8n/) tem o workflow para importar e o passo a passo.
+
+Ponto que decide o funcionamento: a API oficial do WhatsApp **não aceita texto
+livre** para quem nunca escreveu para o número, então a primeira mensagem é um
+**template aprovado pela Meta**. O README de lá traz o texto a cadastrar.
+
 ## Deploy na Vercel
 
 Projeto Next.js padrão, sem configuração especial: **Import → Framework Preset
@@ -123,6 +132,7 @@ lib/
   analytics.ts                agregações do dashboard
   data/repository.ts          interface + Supabase + dados de exemplo
 supabase/schema.sql           tabelas, índices e RLS
+n8n/                          fluxo de WhatsApp ao concluir o diagnóstico
 ```
 
 ### Duas regras que sustentam o resto
