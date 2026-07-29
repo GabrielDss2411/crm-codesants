@@ -10,6 +10,9 @@
  */
 
 const ORIGENS_PADRAO = [
+  // Domínio de produção do formulário. Vem primeiro de propósito: é o valor
+  // ecoado quando a origem não bate, e é onde o formulário realmente vive.
+  "https://forms.codesants.com.br",
   "https://forms-codesants.vercel.app",
   "http://localhost:3000",
   "http://localhost:5500",

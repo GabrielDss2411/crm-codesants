@@ -169,11 +169,9 @@ class SupabaseRepository implements Repository {
   private async client() {
     // Import dinâmico: o pacote só é carregado quando há Supabase configurado.
     const { createClient } = await import("@supabase/supabase-js");
-    return createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!,
-      { auth: { persistSession: false } },
-    );
+    return createClient(supabaseUrl()!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
+      auth: { persistSession: false },
+    });
   }
 
   async listDiagnosticos(): Promise<Diagnostico[]> {
@@ -265,10 +263,18 @@ class SupabaseRepository implements Repository {
    Seleção da fonte
    ============================================================ */
 
+/**
+ * Endereço do projeto Supabase.
+ *
+ * Aceita os dois nomes: `SUPABASE_URL` é o correto aqui (só o servidor usa),
+ * e `NEXT_PUBLIC_SUPABASE_URL` é o que a integração da Vercel injeta sozinha.
+ */
+function supabaseUrl(): string | undefined {
+  return process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
+}
+
 export function isSupabaseConfigured(): boolean {
-  return Boolean(
-    process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY,
-  );
+  return Boolean(supabaseUrl() && process.env.SUPABASE_SERVICE_ROLE_KEY);
 }
 
 let cache: Repository | null = null;
