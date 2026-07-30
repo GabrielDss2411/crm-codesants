@@ -227,6 +227,18 @@ function ParteRespostas({
 
                   {vazio ? (
                     <p className="mt-2 text-[14px] italic text-faint">Não respondida.</p>
+                  ) : Array.isArray(resposta) && q.type === "rank" ? (
+                    // A posição é a resposta: etiquetas soltas perderiam a ordem.
+                    <ol className="mt-2.5 space-y-1.5">
+                      {resposta.map((item, ordem) => (
+                        <li key={`${ordem}-${item}`} className="flex gap-2.5">
+                          <span className="mt-px shrink-0 font-mono text-[12px] text-brand-soft tabular-nums">
+                            {ordem + 1}º
+                          </span>
+                          <span className="text-[15px] leading-relaxed text-ink">{item}</span>
+                        </li>
+                      ))}
+                    </ol>
                   ) : Array.isArray(resposta) ? (
                     <ul className="mt-2.5 flex flex-wrap gap-2">
                       {resposta.map((opcao) => (

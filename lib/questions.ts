@@ -7,7 +7,19 @@
  * para destacar trechos em verde; no CRM lemos a pergunta inteira).
  */
 
-export type QuestionType = "text" | "tel" | "email" | "long" | "single" | "multi";
+/**
+ * "rank" é uma lista ordenada de itens digitados pela pessoa, onde a POSIÇÃO
+ * carrega significado (1º = mais importante). Difere de "multi", em que a
+ * ordem é irrelevante e os valores vêm de opções fixas.
+ */
+export type QuestionType =
+  | "text"
+  | "tel"
+  | "email"
+  | "long"
+  | "single"
+  | "multi"
+  | "rank";
 
 export type Question = {
   id: string;
@@ -75,9 +87,9 @@ export const QUESTIONS: Question[] = [
   {
     id: "q3",
     part: "Parte 1 · Quero conhecer sua empresa",
-    type: "long",
+    type: "rank",
     label: "Qual é o serviço ou produto mais importante para o negócio hoje?",
-    short: "Serviço principal",
+    short: "Serviços por prioridade",
   },
   {
     id: "q4",

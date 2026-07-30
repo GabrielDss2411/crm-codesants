@@ -49,7 +49,9 @@ export function sanitizeAnswers(input: unknown): Answers {
     const question = QUESTIONS_BY_ID[key];
     if (!question) continue;
 
-    if (question.type === "multi") {
+    // "rank" e "multi" chegam como lista; a diferença é o que a ordem significa,
+    // e em ambos ela é preservada como veio.
+    if (question.type === "multi" || question.type === "rank") {
       const list = Array.isArray(raw) ? raw : [raw];
       const values = list
         .filter((v): v is string => typeof v === "string")
